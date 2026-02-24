@@ -8,6 +8,21 @@ See below for setting up the hands-on challenges.
 
 ---
 
+## Table of Contents
+* [Hardware](#hardware)
+* [Reader Simulators](#reader-simulators)
+  1. [Dependencies](#dependencies)
+  2. [Readers](#readers)
+  3. [Reader Status Indicator](#reader-status-indicator)
+* [Hands-on challenges](#hands-on-challenges)
+  1. [Low Frequency Tag](#low-frequency-tag)
+  2. [MIFARE Classic 1K](#mifare-classic-1k)
+  3. [MIFARE DESFire EV1](#mifare-desfire-ev1)
+  4. [MIFARE Ultralight EV1](#mifare-ultralight-ev1)
+  5. [MIFARE Ultralight C](#mifare-ultralight-c)
+
+---
+
 ## Hardware
 
 The following list contains hardware used in the workshop. This gives you an idea on what hardware is required to set up the challenges locally:
@@ -17,9 +32,9 @@ The following list contains hardware used in the workshop. This gives you an ide
 - Cards
   - T5577
   - Mifare Classic 1K
+  - Mifare DESFire EV1
   - Mifare Ultralight EV1
   - Mifare Ultralight C
-  - Mifare DESFire EV1
 
 ---
 
@@ -147,57 +162,6 @@ The objectives of this challenge were to examine how legacy proprietary cryptogr
   - Part 2: `hf mf wrbl --blk 61 -d 49535F494E5345435552450000000000`
 - Set the custom key A (`4E6F44656661`) and key B (`756C744B6579`) for the flag sector: `hf mf wrbl --blk 63 -d 4E6F44656661FF078069756C744B6579`
 
-### MIFARE Ultralight EV1
-
-**Description**
-
-The challenge was to sniff communication between the reader and card, recover the authentication password sent in plaintext, and then use that password to dump card memory and recover the flag from pages 4-9.
-
-**Objective**
-
-The objective of this challenge was to show the risk of transmitting credentials in plaintext and how a simple design flaw can be crucial.
-
-**Creating the card**
-
-- Write the flag:
-  - Part 1: `hf mfu wrbl -b 4 -d 48454C53`
-  - Part 2: `hf mfu wrbl -b 5 -d 45435F53`
-  - Part 3: `hf mfu wrbl -b 6 -d 6E316666`
-  - Part 4: `hf mfu wrbl -b 7 -d 696E675F`
-  - Part 5: `hf mfu wrbl -b 8 -d 4630725F`
-  - Part 6: `hf mfu wrbl -b 9 -d 50574473`
-- Write the authentication data read by the simulator: `hf mfu wrbl -b 14 -d 8A27C6BF`
-- Set protection to start from page 4: `hf mfu wrbl -b 16 -d 00000004`
-- Require password for reading: `hf mfu wrbl -b 17 -d 80050000 -k FFFFFFFF`
-- Set password (`4747455A`): `hf mfu wrbl -b 18 -d 4747455A -k FFFFFFFF`
-
-### MIFARE Ultralight C
-
-**Description**
-
-This challenge focused on sniffing communication between the reader and card, then decoding the flag directly from the trace.
-
-**Objective**
-
-The main objective of this challenge was to show that communication after authentication remains plaintext, even when authentication itself uses the three-pass protocol.
-
-**Creating the card**
-
-- Write the flag:
-  - Part 1: `hf mfu wrbl -b 14 -d 48454C53`
-  - Part 2: `hf mfu wrbl -b 15 -d 45435F43`
-  - Part 3: `hf mfu wrbl -b 16 -d 306D6D7A`
-  - Part 4: `hf mfu wrbl -b 17 -d 5F696E5F`
-  - Part 5: `hf mfu wrbl -b 18 -d 506C3469`
-  - Part 6: `hf mfu wrbl -b 19 -d 6E373378`
-  - Part 7: `hf mfu wrbl -b 20 -d 373F3F3F`
-- Write the authentication data read by the simulator:
-  - Part 1: `hf mfu wrbl -b 30 -d 34553748`
-  - Part 2: `hf mfu wrbl -b 31 -d 55733344`
-  - Part 3: `hf mfu wrbl -b 32 -d 4630724D`
-  - Part 4: `hf mfu wrbl -b 33 -d 46554C43`
-- Set the key: `hf mfu setkey --key 43757374306D5F332D4445535F4B6579`
-
 ### MIFARE DESFire EV1
 
 **Description**
@@ -250,3 +214,54 @@ The main objective of this challenge was to understand MIFARE DESFire memory org
   - Create an encrypted backup file: `hf mfdes createfile --backup --aid 66556e --fid 12 --amode encrypt --cmode mac --rrights key1 --wrights key1 --rwrights key1 --chrights key1 --size 00001f`
   - Change key 1: `hf mfdes changekey --aid 66556e --algo 2TDEA --newkeyno 1 --newkey 4b3379315f4630525f41757468316e47`
   - Write the authentication data to the backup file: `hf mfdes write --aid 66556e --fid 12 --data 316659307543346e5233346437686973506c336173654c33744d654b6e3077 -n 1 -k 4b3379315f4630525f41757468316e47`
+
+### MIFARE Ultralight EV1
+
+**Description**
+
+The challenge was to sniff communication between the reader and card, recover the authentication password sent in plaintext, and then use that password to dump card memory and recover the flag from pages 4-9.
+
+**Objective**
+
+The objective of this challenge was to show the risk of transmitting credentials in plaintext and how a simple design flaw can be crucial.
+
+**Creating the card**
+
+- Write the flag:
+  - Part 1: `hf mfu wrbl -b 4 -d 48454C53`
+  - Part 2: `hf mfu wrbl -b 5 -d 45435F53`
+  - Part 3: `hf mfu wrbl -b 6 -d 6E316666`
+  - Part 4: `hf mfu wrbl -b 7 -d 696E675F`
+  - Part 5: `hf mfu wrbl -b 8 -d 4630725F`
+  - Part 6: `hf mfu wrbl -b 9 -d 50574473`
+- Write the authentication data read by the simulator: `hf mfu wrbl -b 14 -d 8A27C6BF`
+- Set protection to start from page 4: `hf mfu wrbl -b 16 -d 00000004`
+- Require password for reading: `hf mfu wrbl -b 17 -d 80050000 -k FFFFFFFF`
+- Set password (`4747455A`): `hf mfu wrbl -b 18 -d 4747455A -k FFFFFFFF`
+
+### MIFARE Ultralight C
+
+**Description**
+
+This challenge focused on sniffing communication between the reader and card, then decoding the flag directly from the trace.
+
+**Objective**
+
+The main objective of this challenge was to show that communication after authentication remains plaintext, even when authentication itself uses the three-pass protocol.
+
+**Creating the card**
+
+- Write the flag:
+  - Part 1: `hf mfu wrbl -b 14 -d 48454C53`
+  - Part 2: `hf mfu wrbl -b 15 -d 45435F43`
+  - Part 3: `hf mfu wrbl -b 16 -d 306D6D7A`
+  - Part 4: `hf mfu wrbl -b 17 -d 5F696E5F`
+  - Part 5: `hf mfu wrbl -b 18 -d 506C3469`
+  - Part 6: `hf mfu wrbl -b 19 -d 6E373378`
+  - Part 7: `hf mfu wrbl -b 20 -d 373F3F3F`
+- Write the authentication data read by the simulator:
+  - Part 1: `hf mfu wrbl -b 30 -d 34553748`
+  - Part 2: `hf mfu wrbl -b 31 -d 55733344`
+  - Part 3: `hf mfu wrbl -b 32 -d 4630724D`
+  - Part 4: `hf mfu wrbl -b 33 -d 46554C43`
+- Set the key: `hf mfu setkey --key 43757374306D5F332D4445535F4B6579`
