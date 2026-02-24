@@ -71,7 +71,7 @@ cp ./experimental_lib/build/libpm3rrg_rdv4.so /path/to/reader/_pm3.so
 cp ./pyscripts/pm3.py /path/to/reader/pm3.py
 ```
 
-_Note: Even though the client lib is bundled in the repository you might need to rebuild it to match the firmware version installed in your proxmark._
+> Note: Even though the client lib is bundled in the repository you might need to rebuild it to match the firmware version installed in your proxmark.
 
 **Starting the readers**
 
@@ -83,7 +83,7 @@ To run a proxmark reader:
 - Install reader_status_indicator package: `uv pip install /path/to/reader_status_indicator/target/wheels/wheel_file.whl`
 - Run reader: `uv run reader.py`
 
-_Note: Be sure to use absolute paths when installing reader_status_indicator to avoid venv confusion._
+> Note: Be sure to use absolute paths when installing reader_status_indicator to avoid venv confusion.
 
 For Mifare Classic 1K reader (no proxmark):
 - `cargo run --release`
@@ -106,6 +106,8 @@ BINDGEN_EXTRA_CLANG_ARGS = """
 The reader status indicator is built in Rust and uses [winit](https://crates.io/crates/winit) and [wgpu](https://crates.io/crates/wgpu) to create a fullscreen window and renders colors in it.
 
 The reader status indicator uses [PyO3](https://crates.io/crates/pyo3) to create Rust bindings for the Python interpreter. The reader simulator software, that uses proxmark experimental lib, calls the rust functionality to e.g. create a window, change the window color and close the window.
+
+> Note: Currently the Reader Status Indicator is only built for the Wayland compositor. Pull requests for cross-platform compatibility are welcome :)
 
 **Building and installing**
 
