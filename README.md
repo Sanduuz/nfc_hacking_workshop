@@ -77,13 +77,15 @@ cp ./pyscripts/pm3.py /path/to/reader/pm3.py
 
 To run a proxmark reader:
 
-- Make sure you have built the reader status indicator package (see [Reader Status Indicator](#reader-status-indicator) for more details).
+- Make sure you have built the reader status indicator package* (see [Reader Status Indicator](#reader-status-indicator) for more details).
 - Go to reader directory: `cd /path/to/reader`
 - Create uv virtual environment (if doesn't exist): `uv venv`
 - Install reader_status_indicator package: `uv pip install /path/to/reader_status_indicator/target/wheels/wheel_file.whl`
 - Run reader: `uv run reader.py`
 
 > Note: Be sure to use absolute paths when installing reader_status_indicator to avoid venv confusion.
+
+> \* The reader scripts should work without the reader status indicator if you remove all references to the package. This is left as an exercise for the reader.
 
 For Mifare Classic 1K reader (no proxmark):
 - `cargo run --release`
